@@ -1,5 +1,5 @@
 theme: jekyll-theme-minimal
 title: GitDeploy
-logo: img/logo.png
+logo: /img/logo.png
 description: Hosting made easy.
 show_downloads: false
