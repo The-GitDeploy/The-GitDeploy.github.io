@@ -142,3 +142,38 @@ server {
 ```
 
 Now your container can be accessed from anywhere.
+
+## Accessing other files in the repository
+
+Do NOT link to files using relative paths.
+Instead use the docker volume `gitdeploy` like this:
+```yaml
+version: "3.8"
+services:
+  <service name>:
+    image: <docker image>
+    restart: always
+    volumes:
+      - gitdeploy:/gitdeploy:ro
+
+volumes:
+  gitdeploy:
+    external: true
+```
+
+All files of the repository can be accessed from within the container under the path `/gitdeploy`
+
+# Troubleshooting
+
+If you ever pushed a faulty configuration to the degree that the server won't update itself, you can always just connect over SSH and execute the following commands:
+
+Stop all running containers:
+```
+docker kill $(docker ps -q)
+```
+
+Re-run the init script:
+```
+bash <(curl -s https://github.com/The-GitDeploy/core-config/blob/main/setup.sh)
+```
+Don't worry, if an error like `Can't create network, because it already exists!`, this is no problem.
