@@ -68,7 +68,7 @@ You will also need the PAT at a later stage, so keep it nearby.
 
 Execute the following command:
 ```
-bash <(curl -s https://github.com/The-GitDeploy/core-config/blob/main/setup.sh)
+bash <(curl -s https://raw.githubusercontent.com/The-GitDeploy/core-config/main/setup.sh)
 ```
 
 If your repo is private, you will be asked to enter your PAT here.
