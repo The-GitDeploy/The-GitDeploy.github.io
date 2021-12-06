@@ -85,7 +85,7 @@ You will be asked to enter your PAT, leave it empty if your repository is public
 
 After a couple of seconds the basic config should be up and automatically update whenever you push a new config to your repo. You can check if github is able to successfully send the webhook request to your server under your repos' `Recent Deliveries`.
 
-![Settings > Webhooks > <your webhook> > Recent Deliveries](/img/webhook_deliveries.png "Check webhook delivery success")
+![Settings > Webhooks > your_webhook > Recent Deliveries](/img/webhook_deliveries.png "Check webhook delivery success")
 
 The monitoring panel is available under `https://username:password@<your server>:5555`. As its certificate is self-signed, you will probably have to explicitly add it to your browsers trusted certificates. The default username is `admin` with the password `admin`.
 
