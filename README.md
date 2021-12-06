@@ -125,7 +125,7 @@ While this file is enough to launch the image, you probably want to do more:
 
 ### <a name='Connectinganapptoasubdomain'></a>Connecting an app to a subdomain
 
-To expose a container to the internet to steps are necessary.
+To expose a container to the internet, two steps are necessary.
 
 #### <a name='ConnectingtotheGitDeploynetwork'></a>Connecting to the GitDeploy network
 
