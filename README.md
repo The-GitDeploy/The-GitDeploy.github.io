@@ -1,4 +1,5 @@
-# Setup
+# Setup 🐢
+
 
 <!-- vscode-markdown-toc -->
 * [Setting up the repository](#Settinguptherepository)
@@ -32,21 +33,27 @@ Log in to GitHub and navigate to the following repository: [The-GitDeploy/core-c
 
 This repository is a template, so you can use it to create your own repository, using this button:
 
-![The "Use this template" button is on the top right of the code section](/img/use_as_template.png "Use this 'Use this template' button")
+![The "Use this template" button is on the top right of the code section](/img/use_as_template.png "Click 'Use this template' button")
 
-You'll be asked to provide a name for your repository; you can name it however you want.  
-It shouldn't matter, whether the repository is private or not, you probably want to make it private though, to provide anoter layer of security.
+You'll be asked to provide a name for your repository; you can name it however you want. It shouldn't matter whether the repository is private or not, to provide another layer of security you probably want to **make it private** though.
+
+In the file `/compose/management/docker-compose.yml` of your repo, find the line that says `- WATCHED_REPO=` and paste your repository identifier in the format `<user>/<repository>` (e.g. F1nnM/server-management) right after the `=`.    
+
 
 ### <a name='Setupawebhook'></a>Set up a webhook
-Navigate to the settings and add a new webhook.
+Navigate to the repos' settings and add a new webhook.
 
 ![Settings > Webhooks > Add Webhook](/img/webhook.png "Add a new webhook")
 
 Set the Payload URL to `https://<your server>:5555/webhook`.
 
-Keep the content type as `application/x-www-form-urlencoded`.
+(if required, this is a good time to open port 5555)
 
-For now, you need to disable SSL verification, as the admin interface is "only" encrypted using a self-signed certificate.
+Keep the content type as `application/x-www-form-urlencoded` and the trigger event as `Just the push event`.
+
+For now, you need to **disable SSL verification**, as the admin interface is 'only' encrypted using a self-signed certificate.
+
+![](/img/webhook_settings.png "Webhook settings")
 
 ### <a name='Forprivaterepos:GenerateaPAT'></a>(For private repos:) Generate a PAT
 
@@ -54,9 +61,12 @@ For the server to be able to clone a private repo, it needs a Personal Auth Toke
 
 You can generate one in [Githubs developer settings](https://github.com/settings/tokens/new?scopes=repo). Set a name, set it to not expire, and keep the repo scope.
 
-Once generated, copy the token. You need to provide it to the container containing the service to update the containers.  
-In the file `/compose/management/docker-compose.yml` find the line that says `- PAT=""` and paste your PAT between the quotes.  
-You will also need the PAT at a later stage, so keep it nearby.
+![](/img/pat.png "Generate PAT")
+
+**Once generated, copy the token.** You need to provide it to the container which is responsible for keeping all the containers updated.  
+
+In the file `/compose/management/docker-compose.yml` of your private repo, find the line that says `- PAT=` and paste your PAT right after the `=`.  
+You will still need the PAT at a later stage, so keep it nearby.
 
 ## <a name='InstallingGitDeploy'></a>Installing GitDeploy
 
@@ -71,17 +81,18 @@ Execute the following command:
 bash <(curl -s https://raw.githubusercontent.com/The-GitDeploy/core-config/main/setup.sh)
 ```
 
-If your repo is private, you will be asked to enter your PAT here.
+You will be asked to enter your PAT, leave it empty if your repository is public.
 
-After a couple seconds the basic config should be up and running and update, whenever you push to a new config to your repo.
+After a couple of seconds the basic config should be up and automatically update whenever you push a new config to your repo. You can check if github is able to successfully send the webhook request to your server under your repos' `Recent Deliveries`.
+![Settings > Webhooks > <your webhook> > Recent Deliveries](/img/webhook_deliveries.png "Check webhook delivery success")
 
-The monitoring panel is available under `https://username:password@<your server>:5555`. The default username is `admin` with the password `admin`
+The monitoring panel is available under `https://username:password@<your server>:5555`. As its certificate is self-signed, you will probably have to explicitly add it to your browsers trusted certificates. The default username is `admin` with the password `admin`.
 
 ## <a name='Additionalsteps'></a>Additional steps
 
 ### <a name='Changingtheadminpassword'></a>Changing the admin password
 
-The usernames/passwords for the monitoring panel are defined in the file `/compose/management/build_nginx/.htpasswd` in the form:
+The usernames/passwords for the monitoring panel are defined in the file `/compose/management/build_nginx/.htpasswd` in the following format:
 ```
 # comment
 username:password
@@ -89,7 +100,7 @@ username:password:comment
 ```
 Usernames are supplied in plaintext and passwords can be generated with the following command:
 ```
-openssl passwd -5 <plaintext password goes here>
+openssl passwd -5
 ```
 
 ## <a name='Addingapplications'></a>Adding applications
@@ -169,7 +180,7 @@ Now your container can be accessed from anywhere.
 
 ### <a name='Accessingotherfilesintherepository'></a>Accessing other files in the repository
 
-Do NOT link to files using relative paths.
+**Do NOT link to files using relative paths.**
 Instead use the docker volume `gitdeploy` like this:
 ```yaml
 version: "3.8"
@@ -200,4 +211,4 @@ Re-run the init script:
 ```
 bash <(curl -s https://github.com/The-GitDeploy/core-config/blob/main/setup.sh)
 ```
-Don't worry, if an error like `Can't create network, because it already exists!`, this is no problem.
+You can ignore errors like '`Can't create network, because it already exists!`'.
